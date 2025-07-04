@@ -1,0 +1,21 @@
+{
+  "name": "底片拍攝參數紀錄",
+  "short_name": "底片紀錄",
+  "description": "快速紀錄底片拍攝參數的應用程式",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#2a2a2a",
+  "theme_color": "#2a2a2a",
+  "icons": [
+    {
+      "src": "image/myicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "image/myicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
