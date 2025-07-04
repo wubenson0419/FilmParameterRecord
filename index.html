@@ -249,23 +249,65 @@
             <div class="form-group">
                 <label for="shutter">快門：</label>
                 <select id="shutter" name="shutter" required>
-                    <option value="1/60s">1/60s</option> <!-- 預設選中值 -->
-                    <option value="1/125s">1/125s</option>
-                    <option value="1/250s">1/250s</option>
-                    <option value="1/500s">1/500s</option>
+                    <option value="1/4000s">1/4000s</option>
+                    <option value="1/2000s">1/2000s</option>
+                    <option value="1/1500s">1/1500s</option>
                     <option value="1/1000s">1/1000s</option>
+                    <option value="1/750s">1/750s</option>
+                    <option value="1/500s">1/500s</option>
+                    <option value="1/350s">1/350s</option>
+                    <option value="1/250s">1/250s</option>
+                    <option value="1/180s">1/180s</option>
+                    <option value="1/125s">1/125s</option>
+                    <option value="1/90s">1/90s</option>
+                    <option value="1/60s" selected>1/60s</option> <!-- 預設選中值 -->
+                    <option value="1/45s">1/45s</option>
+                    <option value="1/30s">1/30s</option>
+                    <option value="1/20s">1/20s</option>
+                    <option value="1/15s">1/15s</option>
+                    <option value="1/10s">1/10s</option>
+                    <option value="1/8s">1/8s</option>
+                    <option value="1/6s">1/6s</option>
+                    <option value="1/4s">1/4s</option>
+                    <option value="1/3s">1/3s</option>
+                    <option value="1/2s">1/2s</option>
+                    <option value="0.7s">0.7s</option>
+                    <option value="1s">1s</option>
+                    <option value="1.5s">1.5s</option>
+                    <option value="2s">2s</option>
+                    <option value="3s">3s</option>
+                    <option value="4s">4s</option>
+                    <option value="6s">6s</option>
+                    <option value="8s">8s</option>
+                    <option value="10s">10s</option>
+                    <option value="15s">15s</option>
+                    <option value="20s">20s</option>
+                    <option value="30s">30s</option>
+                    <option value="B快門(bulb)">B快門(bulb)</option>
+                    
+                    
+                    
                     <!-- 您可以根據實際需求添加更多快門選項 -->
                 </select>
             </div>
             <div class="form-group">
                 <label for="aperture">光圈：</label>
                 <select id="aperture" name="aperture" required>
-                    <option value="f/2.8">f/2.8</option> <!-- 預設選中值 -->
-                    <option value="f/1.4">f/1.4</option>
+                    <option value="f/1.8">f/1.8</option>
                     <option value="f/2.0">f/2.0</option>
-                    <option value="f/2.8">f/2.8</option>
+                    <option value="f/2.5">f/2.5</option>
+                    <option value="f/2.8" selected>f/2.8</option> <!-- 預設選中值 -->
+                    <option value="f/3.5">f/3.5</option>
                     <option value="f/4.0">f/4.0</option>
                     <option value="f/5.6">f/5.6</option>
+                    <option value="f/6.7">f/6.7</option>
+                    <option value="f/8.0">f/8.0</option>
+                    <option value="f/9.5">f/9.5</option>
+                    <option value="f/11">f/11</option>
+                    <option value="f/13">f/13</option>
+                    <option value="f/16">f/16</option>
+                    <option value="f/19">f/19</option>
+                    <option value="f/22">f/22</option>
                     <!-- 您可以根據實際需求添加更多光圈選項 -->
                 </select>
             </div>
@@ -276,6 +318,7 @@
                         <input type="radio" id="lens1" name="lens" value="Canon EF 50mm f/1.8 STM" required checked>
                         <label for="lens1">Canon EF 50mm f/1.8 STM</label>
                     </div>
+
                     <!-- 您可以根據實際需求添加更多鏡頭選項 -->
                 </div>
             </div>
@@ -283,11 +326,11 @@
                 <label>底片：</label>
                 <div class="radio-group" id="filmRadioGroup">
                     <div class="radio-option">
-                        <input type="radio" id="film1" name="film" value="Kodak Proimage 100" required checked>
+                        <input type="radio" id="film1" name="film" value="Kodak Proimage 100">
                         <label for="film1">Kodak Proimage 100</label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="film2" name="film" value="FUJIFILM Speed Film 400">
+                        <input type="radio" id="film2" name="film" value="FUJIFILM Speed Film 400" required checked>
                         <label for="film2">FUJIFILM Speed Film 400</label>
                     </div>
                     <!-- 您可以根據實際需求添加更多底片選項 -->
@@ -301,7 +344,7 @@
     <footer>
         <p>Created with Google Forms & AI</p>
         <p>&copy; 2025 底片拍攝參數紀錄</p>
-        <p>v5.8.1 (Reliable)</p>
+        <p>v5.8.1 </p>
     </footer>
 
     <script>
@@ -320,11 +363,19 @@
         });
 
         // 初始化單選按鈕的選中樣式
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.radio-group input[type="radio"]:checked').forEach(radio => {
-                radio.closest('.radio-option').classList.add('selected');
+        function initializeRadioSelection() {
+            document.querySelectorAll('.radio-group input[type="radio"]').forEach(radio => {
+                const optionElement = radio.closest('.radio-option');
+                if (radio.checked) {
+                    optionElement.classList.add('selected');
+                } else {
+                    optionElement.classList.remove('selected');
+                }
             });
-        });
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeRadioSelection);
+
 
         // 註冊 Service Worker
         if ('serviceWorker' in navigator) {
@@ -410,9 +461,7 @@
                 displayMessage('資料已成功提交！', 'success');
                 this.reset(); // 提交後清空表單
                 // 重置後，重新應用單選按鈕的預設選中樣式
-                document.querySelectorAll('.radio-group input[type="radio"]:checked').forEach(radio => {
-                    radio.closest('.radio-option').classList.add('selected');
-                });
+                initializeRadioSelection(); // 調用新的函數來正確處理單選按鈕的選中樣式
             })
             .catch(error => {
                 console.error('提交表單時發生錯誤:', error);
@@ -426,7 +475,7 @@
                     submitButton.style.cursor = ''; // 恢復原始游標
                     submitButton.style.boxShadow = ''; // 恢復原始陰影
                     submitButton.style.transform = ''; // 恢復原始懸停效果
-                }, 5000); // 5 秒 = 5000 毫秒
+                }, 15000); // 15 秒 = 15000 毫秒
             });
         });
     </script>
