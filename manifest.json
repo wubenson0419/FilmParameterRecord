@@ -1,6 +1,6 @@
 {
   "name": "底片拍攝參數紀錄",
-  "short_name": "底片參數紀錄",
+  "short_name": "參數紀錄",
   "description": "快速紀錄底片拍攝參數的應用程式",
   "start_url": "./",
   "display": "standalone",
