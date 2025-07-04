@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>底片拍攝參數紀錄</title>
     <link rel="icon" type="image/png" href="image/myicon.png"> <!-- 網站圖標 -->
-
     <!-- PWA 相關 meta 標籤 -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2a2a2a"> <!-- 設定主題顏色，與 body 背景色一致 -->
@@ -162,9 +161,18 @@
             margin-top: 20px;
         }
 
+        /* 提交按鈕懸停時的樣式。 */
         .submit-button:hover {
             background-color: #00C300;
             transform: translateY(-2px);
+        }
+
+        /* 提交按鈕禁用時的樣式 */
+        .submit-button:disabled {
+            background-color: #333333; /* 變深色 */
+            cursor: not-allowed; /* 禁用游標 */
+            transform: translateY(0); /* 移除懸停效果 */
+            box-shadow: none; /* 移除陰影 */
         }
 
         /* 提交訊息的樣式 */
@@ -268,7 +276,6 @@
                         <input type="radio" id="lens1" name="lens" value="Canon EF 50mm f/1.8 STM" required checked>
                         <label for="lens1">Canon EF 50mm f/1.8 STM</label>
                     </div>
-
                     <!-- 您可以根據實際需求添加更多鏡頭選項 -->
                 </div>
             </div>
@@ -276,18 +283,18 @@
                 <label>底片：</label>
                 <div class="radio-group" id="filmRadioGroup">
                     <div class="radio-option">
-                        <input type="radio" id="film1" name="film" value="Kodak Proimage 100">
+                        <input type="radio" id="film1" name="film" value="Kodak Proimage 100" required checked>
                         <label for="film1">Kodak Proimage 100</label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="film2" name="film" value="FUJIFILM Speed Film 400" checked>
+                        <input type="radio" id="film2" name="film" value="FUJIFILM Speed Film 400">
                         <label for="film2">FUJIFILM Speed Film 400</label>
                     </div>
                     <!-- 您可以根據實際需求添加更多底片選項 -->
                 </div>
             </div>
         </form>
-        <button type="submit" form="filmDataForm" class="submit-button">提交紀錄</button>
+        <button type="submit" form="filmDataForm" class="submit-button" id="submitButton">提交紀錄</button>
         <div id="submissionMessage" class="submission-message"></div>
     </div>
 
@@ -357,6 +364,15 @@
             // 阻止表單的預設提交行為
             event.preventDefault();
 
+            const submitButton = document.getElementById('submitButton'); // 獲取提交按鈕
+
+            // 禁用按鈕並改變顏色
+            submitButton.disabled = true;
+            submitButton.style.backgroundColor = '#333333'; // 變深色
+            submitButton.style.cursor = 'not-allowed'; // 改變游標樣式
+            submitButton.style.boxShadow = 'none'; // 移除陰影
+            submitButton.style.transform = 'translateY(0)'; // 移除懸停效果
+
             // 獲取表單輸入的值
             const shutter = document.getElementById('shutter').value;
             const aperture = document.getElementById('aperture').value;
@@ -401,6 +417,16 @@
             .catch(error => {
                 console.error('提交表單時發生錯誤:', error);
                 displayMessage('提交失敗，請檢查網路或稍後再試。', 'error');
+            })
+            .finally(() => {
+                // 無論成功或失敗，10秒後恢復按鈕狀態
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitButton.style.backgroundColor = ''; // 恢復原始背景色 (由 CSS 處理)
+                    submitButton.style.cursor = ''; // 恢復原始游標
+                    submitButton.style.boxShadow = ''; // 恢復原始陰影
+                    submitButton.style.transform = ''; // 恢復原始懸停效果
+                }, 5000); // 5 秒 = 5000 毫秒
             });
         });
     </script>
