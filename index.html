@@ -1,81 +1,407 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>底片拍攝參數紀錄</title>
-    
-    <!-- PWA 與 App-like 設定 -->
-    <link rel="manifest" href="manifest.webmanifest">
-    <meta name="theme-color" content="#2a2a2a">
-    <!-- 原本的保留 -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <!-- 新增這行：提供更廣泛的支援 -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="底片紀錄">
+    <link rel="icon" type="image/png" href="image/myicon.png"> <!-- 網站圖標 -->
 
-    <!-- 圖示設定 (統一使用 myicon.png) -->
-    <link rel="apple-touch-icon" href="image/myicon.png">
-    <link rel="icon" type="image/png" href="image/myicon.png">
-    
+    <!-- PWA 相關 meta 標籤 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2a2a2a"> <!-- 設定主題顏色，與 body 背景色一致 -->
+    <link rel="apple-touch-icon" href="image/myicon.png"> <!-- iOS 桌面圖標 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <style>
-        /* CSS 內容保持不變，此處省略以保持簡潔 */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { height: 100%; }
-        body { background: linear-gradient(135deg, #2a2a2a, #1a1a1a); color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif, "微軟正黑體"; min-height: 100vh; display: flex; flex-direction: column; }
-        .content-wrapper { flex-grow: 1; padding: 0 20px; }
-        header { text-align: center; padding-top: 25px; margin-bottom: 25px; }
-        header h1 { font-size: 26px; background-color: #3C3C3C; padding: 10px 25px; border-radius: 15px; display: inline-block; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); }
-        footer { text-align: center; font-family: "Source Code Pro", monospace; font-size: 14px; color: #BBBBBB; flex-shrink: 0; padding: 30px 20px 20px; }
-        .form-container { max-width: 600px; margin: 0 auto 40px auto; padding: 30px; background-color: #3C3C3C; border-radius: 20px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); }
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; margin-bottom: 10px; font-size: 18px; font-weight: bold; }
-        .form-group select { width: 100%; padding: 12px; border: 1px solid #555; background-color: #2a2a2a; color: #fff; border-radius: 8px; font-size: 16px; cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23BBBBBB' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1em center; }
-        .radio-group label { display: flex; align-items: center; padding: 12px; border: 1px solid #555; border-radius: 8px; margin-bottom: 10px; cursor: pointer; background-color: #2a2a2a; transition: background-color 0.3s, border-color 0.3s; }
-        .radio-group label:hover { background-color: #444; }
-        .radio-group input[type="radio"] { display: none; }
-        .radio-group input[type="radio"]:checked + span { border-color: #00C300; }
-        .radio-group span { display: flex; align-items: center; width: 100%; border-left: 5px solid transparent; padding-left: 10px; transition: border-color 0.3s; }
-        .submit-btn { width: 100%; padding: 15px; border: none; border-radius: 8px; background-color: #4F4F4F; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; }
-        .submit-btn:hover { background-color: #00C300; }
+        /*
+            --- style.css ---
+            此 CSS 檔案包含網站的所有樣式定義，從基礎設定到響應式設計。
+            - 統一管理網頁的外觀、排版、顏色和動畫效果。
+        */
+
+        /* --- 1. 全域 & 基礎樣式 (Global & Base Styles) --- */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            background-color: #2a2a2a;
+            color: #FFFFFF;
+            font-family: sans-serif, "微軟正黑體";
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* --- 2. 主要卡片容器樣式 (Main Card Container Styles) --- */
+
+        .main-record-card {
+            background-color: #3C3C3C;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+        }
+
+        .card-title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #555;
+        }
+
+        /* --- 3. 表單內容通用樣式 (Form Content Styles) --- */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 18px;
+            color: #E0E0E0;
+            font-weight: bold;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #555;
+            background-color: #2a2a2a;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2C197.9L159.2%2C69.2c-4.4-4.2-11.5-4.2-15.9%2C0L5.4%2C197.9c-4.4%2C4.2-4.4%2C11.5%2C0%2C15.7l15.8%2C15.7c4.4%2C4.2%2C11.5%2C4.2%2C15.9%2C0l106.9-102.8l106.9%2C102.8c4.4%2C4.2%2C11.5%2C4.2%2C15.9%2C0l15.8-15.7C291.4%2C209.4%2C291.4%2C202.1%2C287%2C197.9z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 12px top 50%;
+            background-size: 12px auto;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: #515BD4;
+            box-shadow: 0 0 0 3px rgba(81, 91, 212, 0.5);
+        }
+
+        /* 修改單選按鈕選項的樣式 */
+        .radio-option {
+            position: relative;
+            background-color: #2a2a2a;
+            border: 1px solid #555; /* 預設邊框顏色 */
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            overflow: hidden; /* 確保綠色條不超出 */
+            padding: 12px; /* 為內容提供基礎內邊距 */
+        }
+
+        /* 隱藏實際的單選按鈕 */
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        /* 單選選項選中時的綠色左側條 (偽元素) */
+        .radio-option.selected::before {
+            content: '';
+            position: absolute;
+            top: 50%; /* 垂直居中 */
+            transform: translateY(-50%); /* 根據自身高度調整，確保精確居中 */
+            left: 12px; /* 這裡的 12px 與 .radio-option 的 padding-left 相等 */
+            width: 8px; /* 綠色條的寬度，使其更像長方形 */
+            height: 24px; /* 固定高度，使其不頂天立地 */
+            background-color: #00C300; /* 綠色 */
+            border-radius: 2px; /* 輕微圓角，讓邊角更柔和 */
+            transition: all 0.3s ease; /* 添加過渡效果，讓變化更平滑 */
+        }
+
+        /* 修改單選按鈕標籤的樣式 */
+        .radio-option label {
+            display: block; /* 讓標籤佔據整個選項區域，方便點擊 */
+            cursor: pointer;
+            color: #fff;
+            font-size: 16px;
+            position: relative; /* 確保文字在綠色條之上 */
+            z-index: 1; /* 確保文字在綠色條之上 */
+            margin-bottom: 0; /* 移除預設 margin-bottom */
+            /* 調整左側內邊距：12px (radio-option padding) + 8px (綠色條寬度) + 10px (綠色條與文字間距) = 30px */
+            padding: 0 0 0 30px; /* 僅調整左側內邊距，其他方向由 .radio-option 的 padding 控制 */
+        }
+
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #4F4F4F;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+        }
+
+        .submit-button:hover {
+            background-color: #00C300;
+            transform: translateY(-2px);
+        }
+
+        /* 提交訊息的樣式 */
+        .submission-message {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            opacity: 0; /* 預設隱藏 */
+            transition: opacity 0.5s ease;
+        }
+
+        .submission-message.success {
+            background-color: #4CAF50; /* 綠色背景 */
+            color: #fff;
+        }
+
+        .submission-message.error {
+            background-color: #f44336; /* 紅色背景 */
+            color: #fff;
+        }
+
+        .submission-message.show {
+            opacity: 1; /* 顯示 */
+        }
+
+        /* --- 4. 頁尾樣式 (Footer Styles) --- */
+
+        footer {
+            text-align: center;
+            font-family: "Source Code Pro", monospace;
+            font-size: 12px;
+            color: #BBBBBB;
+            flex-shrink: 0;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* --- 5. 媒體查詢：響應式設計 (Media Queries: Responsive Design) --- */
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .main-record-card {
+                padding: 20px;
+            }
+
+            .card-title {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+
+            .form-group label {
+                font-size: 16px;
+            }
+
+            .form-group select,
+            .radio-option label,
+            .submit-button {
+                padding: 10px;
+                font-size: 15px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="content-wrapper">
-        <header><h1>底片拍攝參數紀錄</h1></header>
-        <main>
-            <div class="form-container">
-                <form action="https://docs.google.com/forms/d/e/1FAIpQLSelI6R9Ee_axp2ktBDrPQfKEE68JqmGZ8QjvORqj45sr84rxA/formResponse" method="POST" target="hidden_iframe" id="filmForm">
-                    <!-- 表單內容保持不變 -->
-                    <div class="form-group"><label for="shutter">快門</label><select id="shutter" name="entry.1162837219" required><option value="1/4000">1/4000s</option><option value="1/3000">1/3000s</option><option value="1/2000">1/2000s</option><option value="1/1500">1/1500s</option><option value="1/1000">1/1000s</option><option value="1/750">1/750s</option><option value="1/500">1/500s</option><option value="1/350">1/350s</option><option value="1/250">1/250s</option><option value="1/180">1/180s</option><option value="1/125">1/125s</option><option value="1/90">1/90s</option><option value="1/60" selected>1/60s</option><option value="1/45">1/45s</option><option value="1/30">1/30s</option><option value="1/20">1/20s</option><option value="1/15">1/15s</option><option value="1/10">1/10s</option><option value="1/8">1/8s</option><option value="1/6">1/6s</option><option value="1/4">1/4s</option><option value="1/3">1/3s</option><option value="1/2">1/2s</option><option value="0.7">0.7s</option><option value="1">1s</option><option value="1.5">1.5s</option><option value="2">2s</option><option value="3">3s</option><option value="4">4s</option><option value="6">6s</option><option value="8">8s</option><option value="10">10s</option><option value="15">15s</option><option value="20">20s</option><option value="30">30s</option><option value="buLb">B快門 (Bulb)</option></select></div>
-                    <div class="form-group"><label for="aperture">光圈</label><select id="aperture" name="entry.2079918262" required><option value="1.8">f/1.8</option><option value="2.0">f/2.0</option><option value="2.5">f/2.5</option><option value="2.8" selected>f/2.8</option><option value="3.5">f/3.5</option><option value="4.0">f/4.0</option><option value="4.5">f/4.5</option><option value="5.6">f/5.6</option><option value="6.7">f/6.7</option><option value="8.0">f/8.0</option><option value="9.5">f/9.5</option><option value="11">f/11</option><option value="13">f/13</option><option value="16">f/16</option><option value="19">f/19</option><option value="22">f/22</option></select></div>
-                    <div class="form-group"><label>鏡頭</label><div class="radio-group"><label><input type="radio" name="entry.667668492" value="Canon EF 50mm f/1.8 STM" checked><span>Canon EF 50</span></label></div></div>
-                    <div class="form-group"><label>底片</label><div class="radio-group"><label><input type="radio" name="entry.733732167" value="Kodak Proimage 100"><span>Kodak Proimage 100</span></label><label><input type="radio" name="entry.733732167" value="FUJIFILM Speed Film 400" checked><span>FUJIFILM Speed Film 400</span></label></div></div>
-                    <button type="submit" class="submit-btn">提交紀錄</button>
-                </form>
+    <div class="main-record-card">
+        <h1 class="card-title">底片拍攝參數紀錄</h1>
+        <form id="filmDataForm">
+            <div class="form-group">
+                <label for="shutter">快門：</label>
+                <select id="shutter" name="shutter" required>
+                    <option value="1/60s">1/60s</option> <!-- 預設選中值 -->
+                    <option value="1/125s">1/125s</option>
+                    <option value="1/250s">1/250s</option>
+                    <option value="1/500s">1/500s</option>
+                    <option value="1/1000s">1/1000s</option>
+                    <!-- 您可以根據實際需求添加更多快門選項 -->
+                </select>
             </div>
-        </main>
+            <div class="form-group">
+                <label for="aperture">光圈：</label>
+                <select id="aperture" name="aperture" required>
+                    <option value="f/2.8">f/2.8</option> <!-- 預設選中值 -->
+                    <option value="f/1.4">f/1.4</option>
+                    <option value="f/2.0">f/2.0</option>
+                    <option value="f/2.8">f/2.8</option>
+                    <option value="f/4.0">f/4.0</option>
+                    <option value="f/5.6">f/5.6</option>
+                    <!-- 您可以根據實際需求添加更多光圈選項 -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label>鏡頭：</label>
+                <div class="radio-group" id="lensRadioGroup">
+                    <div class="radio-option">
+                        <input type="radio" id="lens1" name="lens" value="Canon EF 50mm f/1.8 STM" required checked>
+                        <label for="lens1">Canon EF 50mm f/1.8 STM</label>
+                    </div>
+
+                    <!-- 您可以根據實際需求添加更多鏡頭選項 -->
+                </div>
+            </div>
+            <div class="form-group">
+                <label>底片：</label>
+                <div class="radio-group" id="filmRadioGroup">
+                    <div class="radio-option">
+                        <input type="radio" id="film1" name="film" value="Kodak Proimage 100">
+                        <label for="film1">Kodak Proimage 100</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="film2" name="film" value="FUJIFILM Speed Film 400" checked>
+                        <label for="film2">FUJIFILM Speed Film 400</label>
+                    </div>
+                    <!-- 您可以根據實際需求添加更多底片選項 -->
+                </div>
+            </div>
+        </form>
+        <button type="submit" form="filmDataForm" class="submit-button">提交紀錄</button>
+        <div id="submissionMessage" class="submission-message"></div>
     </div>
 
     <footer>
         <p>Created with Google Forms & AI</p>
-        <p>© 2025 底片拍攝參數紀錄</p>
-        <p>v2.3.0 (Stable)</p>
+        <p>&copy; 2025 底片拍攝參數紀錄</p>
+        <p>v5.8.1 (Reliable)</p>
     </footer>
 
-    <!-- 隱藏的 iframe，僅用於接收表單提交的回應 -->
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
-    <!-- 【功能改良】採用更可靠的 JS 事件監聽來顯示成功提示 -->
     <script>
-        const form = document.getElementById('filmForm');
-        form.addEventListener('submit', function() {
-            // 延遲 1 秒，確保表單有足夠時間送出
+        // 處理單選按鈕選中狀態的視覺效果
+        document.querySelectorAll('.radio-group input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // 移除同一組中所有選項的 'selected' 類別
+                this.closest('.radio-group').querySelectorAll('.radio-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                // 如果當前單選按鈕被選中，則為其父級 '.radio-option' 添加 'selected' 類別
+                if (this.checked) {
+                    this.closest('.radio-option').classList.add('selected');
+                }
+            });
+        });
+
+        // 初始化單選按鈕的選中樣式
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.radio-group input[type="radio"]:checked').forEach(radio => {
+                radio.closest('.radio-option').classList.add('selected');
+            });
+        });
+
+        // 註冊 Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                try {
+                    navigator.serviceWorker.register('sw.js')
+                        .then(registration => {
+                            console.log('Service Worker 註冊成功:', registration);
+                        })
+                        .catch(error => {
+                            console.error('Service Worker 註冊失敗:', error);
+                            // 這裡可以添加一個使用者友善的提示，例如：
+                            // displayMessage('無法註冊離線功能 (Service Worker)。請確保網站透過 HTTPS 或 localhost 運行。', 'error');
+                        });
+                } catch (e) {
+                    console.error('嘗試註冊 Service Worker 時發生錯誤:', e);
+                    // displayMessage('您的瀏覽器環境不支援 Service Worker 的註冊。請確保網站透過 HTTPS 或 localhost 運行。', 'error');
+                }
+            });
+        } else {
+            console.warn('您的瀏覽器不支援 Service Worker。');
+            // displayMessage('您的瀏覽器不支援離線功能。', 'error');
+        }
+
+        // 顯示提交訊息的函數
+        function displayMessage(message, type) {
+            const messageDiv = document.getElementById('submissionMessage');
+            messageDiv.textContent = message;
+            messageDiv.className = `submission-message show ${type}`; // 添加 show 和類型 class
             setTimeout(() => {
-                alert('參數紀錄已成功提交！');
-                form.reset(); // 提交後自動清空表單，方便下次輸入
-            }, 1000); 
+                messageDiv.classList.remove('show'); // 2秒後隱藏
+            }, 2000);
+        }
+
+        // 表單提交邏輯
+        document.getElementById('filmDataForm').addEventListener('submit', function(event) {
+            // 阻止表單的預設提交行為
+            event.preventDefault();
+
+            // 獲取表單輸入的值
+            const shutter = document.getElementById('shutter').value;
+            const aperture = document.getElementById('aperture').value;
+            
+            // 對於單選按鈕，需要找到被選中的那個
+            const selectedLens = document.querySelector('input[name="lens"]:checked');
+            const lens = selectedLens ? selectedLens.value : '';
+            
+            const selectedFilm = document.querySelector('input[name="film"]:checked');
+            const film = selectedFilm ? selectedFilm.value : '';
+
+            // Google 表單的基礎 URL 和表單 ID
+            const formId = '1FAIpQLSeTmN-IaOqOkLuamWkqSUuwN7UOFn_P1Hjhwn9PKExbalVoeA';
+            const baseUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
+
+            // 根據您提供的 entry.id 構建 FormData
+            // 使用 FormData 可以更好地處理表單數據的編碼
+            const formData = new FormData();
+            formData.append('entry.854732717', shutter); // 快門的 entry.id
+            formData.append('entry.1780086541', aperture); // 光圈的 entry.id
+            formData.append('entry.1723423751', lens); // 鏡頭的 entry.id
+            formData.append('entry.1607544964', film); // 底片的 entry.id
+            formData.append('submit', 'Submit'); // Google Forms 需要這個參數來識別提交
+
+            // 發送 POST 請求到 Google 表單
+            fetch(baseUrl, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' // 這是關鍵，讓請求在不觸發 CORS 錯誤的情況下發送
+            })
+            .then(response => {
+                // 在 'no-cors' 模式下，我們無法直接檢查 response.ok 或 status
+                // 因為瀏覽器會限制對跨域響應的訪問。
+                // 如果 fetch 請求沒有網路錯誤，我們就假設提交成功。
+                displayMessage('資料已成功提交！', 'success');
+                this.reset(); // 提交後清空表單
+                // 重置後，重新應用單選按鈕的預設選中樣式
+                document.querySelectorAll('.radio-group input[type="radio"]:checked').forEach(radio => {
+                    radio.closest('.radio-option').classList.add('selected');
+                });
+            })
+            .catch(error => {
+                console.error('提交表單時發生錯誤:', error);
+                displayMessage('提交失敗，請檢查網路或稍後再試。', 'error');
+            });
         });
     </script>
 </body>
